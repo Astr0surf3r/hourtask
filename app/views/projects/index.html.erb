@@ -1,8 +1,10 @@
+<div class="container">
+
 <p id="notice"><%= notice %></p>
 
 <h1>Projects</h1>
 
-<table>
+<table class="table">
   <thead>
     <tr>
       <th>Name</th>
@@ -25,6 +27,8 @@
 <br>
 
 
-<%= link_to 'New Project', new_project_path %> <br />
+<%= link_to 'New Project', new_project_path, class: "btn btn-sm btn-success" %> <br />
 
 <%= link_to 'All Tasks', all_tasks_path %>
+
+</div>
