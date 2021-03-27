@@ -23,7 +23,7 @@
 
   <div class="field">
     <%= form.label :end_time %>
-    <%= form.time_select :end_time %>
+    <%= form.time_select :end_time, disabled: true %>
   </div>
 
   <div class="field">
@@ -35,8 +35,10 @@
     <%= form.label :project_id %>
     <%= form.select("project_id", Project.all.collect {|p| [ p.name, p.id ] }, { prompt: true, :selected => @project.id }, required: true) %>
   </div>
-
+  
   <div class="actions">
     <%= form.submit %>
   </div>
 <% end %>
+
+<%= link_to "all task of #{@project.name}", project_tasks_path(@project)  %>
