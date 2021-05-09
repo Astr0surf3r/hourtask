@@ -42,6 +42,10 @@ class TasksController < ApplicationController
   def update
     respond_to do |format|
       if @task.update(task_params)
+        if @task.closed?
+          hours_worked = calculate_hours_worked(@task)
+          @task.update(hours_worked: hours_worked)
+        end
         format.html { redirect_to project_tasks_path, notice: "Task was successfully updated." }
         format.json { render :show, status: :ok, location: @task }
       else
@@ -63,8 +67,20 @@ class TasksController < ApplicationController
   def all_tasks
     @tasks = Task.all
   end
+  
+  #def close_task
+  #  @project = Project.find(params[:project_id])
+  #  @task = Task.find(params[:id])
+  #end
 
   private
+    
+    def calculate_hours_worked(task)
+      @task = task
+      hours_worked = ((@task.start_time.to_time.seconds_until_end_of_day - @task.end_time.to_time.seconds_until_end_of_day)/60).to_f/60
+      hours_worked = hours_worked.round(2)
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_task
       @task = Task.find(params[:id])
@@ -76,6 +92,7 @@ class TasksController < ApplicationController
                                    :start_time,
                                    :end_time,
                                    :description,
-                                   :project_id)
+                                   :project_id,
+                                   :closed)
     end
 end

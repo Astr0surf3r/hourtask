@@ -1,0 +1,13 @@
+// Add the dialog title
+$('.modal h5').html(" Edit Task");
+
+// Render the edit form
+$('.modal-body').html('<%= j render("form") %>');
+
+// Show the dynamic dialog
+$('.modal').modal("show");
+
+// Set focus to the first element
+$('.modal').on('shown.bs.modal', function () {
+	  $('.first_input').focus()
+  })

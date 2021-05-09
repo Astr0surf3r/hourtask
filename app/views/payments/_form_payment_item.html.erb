@@ -1,0 +1,25 @@
+<%= form_for PaymentItem.new do |f| %>
+  <div class="form-row">
+    <div class="col">
+      <%= f.label :product_id, 'Producto' %> <br />
+      <%= f.search_field :product_id, placeholder: "nombre producto", data: { behavior: "autocomplete"}, class: "form-control", required: true %>
+    </div>
+    <div class="col">
+      <%= f.label :quantity, 'Cantidad' %> <br />
+      <%= f.number_field :quantity, placeholder: "cantidad", step: :any, required: true, class: "form-control" %>
+    </div>
+    <div class="col">
+      <%= f.label :price, 'Precio' %> <br />
+      <%= f.number_field :price, placeholder: "precio MXN", step: :any, required: true, class: "form-control" %> 
+    </div>
+    <div class="col">
+      <%= f.label :wharehouse, 'Almacen' %> <br />
+      <%= f.collection_select :wharehouse_id, @wharehouses, :id, :name, {prompt: 'Escoje Almacen'}, {class: "form-control", required: true} %>
+    </div>
+    <div class="col">
+    <p style="padding:4px;">&nbsp;</p>
+      <%= f.submit 'Agrega Producto', class: "btn btn-info btn-md"  %>
+    </div>
+  </div>
+
+<% end %>

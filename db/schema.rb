@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_27_052340) do
+ActiveRecord::Schema.define(version: 2021_05_09_012040) do
 
   create_table "companies", force: :cascade do |t|
     t.string "name"
@@ -18,11 +18,32 @@ ActiveRecord::Schema.define(version: 2021_03_27_052340) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "payment_items", force: :cascade do |t|
+    t.integer "payment_id"
+    t.integer "project_id"
+    t.float "hours_payed"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "payments", force: :cascade do |t|
+    t.decimal "amount"
+    t.string "currency"
+    t.string "payment_method"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "date_payment"
+  end
+
   create_table "projects", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "company_id"
+    t.decimal "hourly_rate"
+    t.string "currency"
+    t.float "previous_hours_worked"
+    t.float "previous_hours_payed"
   end
 
   create_table "tasks", force: :cascade do |t|
@@ -34,6 +55,7 @@ ActiveRecord::Schema.define(version: 2021_03_27_052340) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "closed", default: false
+    t.float "hours_worked"
   end
 
 end

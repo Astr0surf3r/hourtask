@@ -7,7 +7,14 @@
 <table class="table">
   <thead>
     <tr>
+      <!-- <th>Begin</th> -->
       <th>Name</th>
+      <th>Hourly Rate</th>
+      <th>Currency</th>
+      <th>Hours Worked</th>
+      <th>Hours Payed</th>
+      <th>Hours UnPayed</th>
+      <th>Company</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -15,9 +22,14 @@
   <tbody>
     <% @projects.each do |project| %>
       <tr>
-        <td><%= project.name %></td>
+        <!-- <td> <%#= Date.parse(project.created_at.to_s).strftime('%d/%m/%Y') %> </td> -->
+        <td><%= link_to project.name, project_tasks_path(project) %></td>
+        <td><%= number_to_currency(project.hourly_rate, unit: "$ ", separator: ",", delimiter: "")  %></td>
+        <td><%= project.currency %></td>
+        <td><%= calculate_project_hours_worked(project) %></td>
+        <td><%= project.company.nil? ? "-" : (link_to project.company.name, company_path(project.company)) %></td>
         <td><%= link_to 'Add Tasks', project_tasks_path(project) %></td>
-        <td><%= link_to 'Edit', edit_project_path(project) %></td>
+        <td><%= link_to 'Edit', edit_project_path(project), remote: true %></td>
         <td><%= link_to 'Destroy', project, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
@@ -26,9 +38,10 @@
 
 <br>
 
+<%= link_to 'New Project', new_project_path, class: "btn btn-sm btn-success", remote: true %> | 
 
-<%= link_to 'New Project', new_project_path, class: "btn btn-sm btn-success" %> <br />
-
-<%= link_to 'All Tasks', all_tasks_path %>
+<%= link_to 'All Tasks', all_tasks_path, class: "btn btn-sm btn-warning" %>
 
 </div>
+
+<%= render "dialog" %>

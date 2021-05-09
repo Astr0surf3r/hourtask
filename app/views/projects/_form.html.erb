@@ -12,14 +12,30 @@
   <% end %>
 
   <div class="field">
-    <%= form.label :name %>
+    <%= form.label :name %> <br />
     <%= form.text_field :name, required: true %>
   </div>
   
   <div class="field">
-    <%= form.label :company_id %>
-    <%= form.select("company_id", Company.all.collect {|p| [ p.name, p.id ] }, { prompt: true }, required: true) %>
+    <%= form.label :hourly_rate %> <br />
+    <%= form.text_field :hourly_rate, required: true %>
   </div>
+  
+  <div class="field">
+    <%= form.label :currency %> <br />
+    <%= form.select :currency, ["MXN", "USD"] %>
+  </div>
+  
+   <div class="field">
+    <%= form.label :previous_hours_worked %> <br />
+    <%= form.number_field :previous_hours_worked, value: 0, step: :any %>
+  </div>
+
+  <div class="field">
+    <%= form.label :company_id %> <br />
+    <%= form.select("company_id", Company.all.collect {|p| [ p.name, p.id ] }, { prompt: true }, required: true) %>
+  </div> <br />
+  
 
   <div class="actions">
     <%= form.submit %>
