@@ -4,7 +4,7 @@ class TasksController < ApplicationController
   # GET /tasks or /tasks.json
   def index
     @project = Project.find(params[:project_id])
-    @tasks = @project.tasks
+    @tasks = @project.tasks.order("day DESC")
   end
 
   # GET /tasks/1 or /tasks/1.json
@@ -26,7 +26,6 @@ class TasksController < ApplicationController
   # POST /tasks or /tasks.json
   def create
     @task = Task.new(task_params)
-
     respond_to do |format|
       if @task.save
         format.html { redirect_to project_tasks_path, notice: "Task was successfully created." }
@@ -57,21 +56,17 @@ class TasksController < ApplicationController
 
   # DELETE /tasks/1 or /tasks/1.json
   def destroy
+    @project = @task.project
     @task.destroy
     respond_to do |format|
-      format.html { redirect_to tasks_url, notice: "Task was successfully destroyed." }
+      format.html { redirect_to project_tasks_path(@project), notice: "Task was successfully destroyed." }
       format.json { head :no_content }
     end
   end
 
   def all_tasks
-    @tasks = Task.all
+    @tasks = Task.all.order("day DESC")
   end
-  
-  #def close_task
-  #  @project = Project.find(params[:project_id])
-  #  @task = Task.find(params[:id])
-  #end
 
   private
     

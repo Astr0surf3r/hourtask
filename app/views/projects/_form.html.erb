@@ -26,9 +26,14 @@
     <%= form.select :currency, ["MXN", "USD"] %>
   </div>
   
-   <div class="field">
+  <div class="field">
     <%= form.label :previous_hours_worked %> <br />
-    <%= form.number_field :previous_hours_worked, value: 0, step: :any %>
+    <%= form.number_field :previous_hours_worked, step: :any %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :previous_hours_paid %> <br />
+    <%= form.number_field :previous_hours_paid, step: :any %>
   </div>
 
   <div class="field">

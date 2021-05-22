@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 2021_05_09_012040) do
   create_table "payment_items", force: :cascade do |t|
     t.integer "payment_id"
     t.integer "project_id"
-    t.float "hours_payed"
+    t.float "hours_paid"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(version: 2021_05_09_012040) do
     t.decimal "hourly_rate"
     t.string "currency"
     t.float "previous_hours_worked"
-    t.float "previous_hours_payed"
+    t.float "previous_hours_paid"
   end
 
   create_table "tasks", force: :cascade do |t|

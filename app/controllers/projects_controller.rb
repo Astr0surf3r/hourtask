@@ -3,7 +3,7 @@ class ProjectsController < ApplicationController
 
   # GET /projects or /projects.json
   def index
-    @projects = Project.all
+    @projects = Project.all.order("name ASC")
   end
 
   # GET /projects/1 or /projects/1.json
@@ -56,6 +56,31 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def get_pdf
+
+    #html = File.read(Rails.root.join('app/assets/files/receipt.html'))
+
+    #@pdf = WickedPdf.new.pdf_from_string(html.clone,
+    #                                       margin: {
+    #                                           top: '0.25in',
+    #                                           bottom: '0.25in',
+    #                                           right: '0.25in',
+    #                                           left: '0.25in'
+    #                                       }
+    #                                    )
+
+    #send_data @pdf, type: 'application/pdf', disposition: 'inline' 
+    
+    respond_to do |format|
+      format.html
+      format.pdf do
+        pdf = ProjectsPdf.new
+        send_data pdf.render, filename: "ciao.pdf", type: "application/pdf"
+      end
+    end
+
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_project
@@ -68,6 +93,7 @@ class ProjectsController < ApplicationController
                                       :hourly_rate,
                                       :currency,
                                       :company_id,
-                                      :previous_hours_worked)
+                                      :previous_hours_worked,
+                                      :previous_hours_paid)
     end
 end

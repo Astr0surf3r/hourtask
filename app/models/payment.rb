@@ -1,6 +1,5 @@
 class Payment < ApplicationRecord
  
-  belongs_to :project
-  has_many :payment_items
+  has_many :payment_items, dependent: :destroy
   
 end

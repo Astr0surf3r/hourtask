@@ -11,8 +11,9 @@ import "channels"
 import jquery from 'jquery';
 window.$ = window.jquery = jquery;
 
-import 'bootstrap'
-import 'packs/select_company'
+import "bootstrap"
+import "@fortawesome/fontawesome-free/css/all"
+import "packs/select_company"
 
 Rails.start()
 Turbolinks.start()

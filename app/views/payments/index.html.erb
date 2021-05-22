@@ -2,7 +2,7 @@
 
 <p id="notice"><%= notice %></p>
 
-<h1>Payments</h1>
+<h1>Payments</h1> 
 
 <table class="table">
   <thead>
@@ -18,10 +18,10 @@
   <tbody>
     <% @payments.each do |payment| %>
       <tr>
-        <td><%= payment.amount %></td>
+        <td><%= number_to_currency(payment.amount, unit: "MXN ") %></td>
         <td><%= payment.currency %></td>
         <td><%= payment.payment_method %></td>
-        <td><%= payment.payment_items.pluck(:name) %></td>
+        <td><%= retrieve_projects(payment) %></td>
         <td><%= link_to 'Show', payment %></td>
         <td><%= link_to 'Edit', edit_payment_path(payment) %></td>
         <td><%= link_to 'Destroy', payment, method: :delete, data: { confirm: 'Are you sure?' } %></td>

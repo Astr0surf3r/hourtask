@@ -2,7 +2,15 @@
 
 <p id="notice"><%= notice %></p>
 
-<h1>Projects</h1>
+<div class="row">
+  <div class="col">
+    <h1>Projects</h1> 
+  </div>
+  <div class="col text-right">
+    <%= link_to "<i class='fas fa-download'></i> .xls".html_safe, get_pdf_path, class: "btn btn-sm btn-success" %>
+    <%= link_to "<i class='fas fa-download'></i> .pdf".html_safe, get_pdf_path, class: "btn btn-sm btn-danger" %>
+  </div>
+</div>
 
 <table class="table">
   <thead>
@@ -12,8 +20,8 @@
       <th>Hourly Rate</th>
       <th>Currency</th>
       <th>Hours Worked</th>
-      <th>Hours Payed</th>
-      <th>Hours UnPayed</th>
+      <th>Hours Paid</th>
+      <th>Hours UnPaid</th>
       <th>Company</th>
       <th colspan="3"></th>
     </tr>
@@ -26,7 +34,9 @@
         <td><%= link_to project.name, project_tasks_path(project) %></td>
         <td><%= number_to_currency(project.hourly_rate, unit: "$ ", separator: ",", delimiter: "")  %></td>
         <td><%= project.currency %></td>
-        <td><%= calculate_project_hours_worked(project) %></td>
+        <td><%= calculate_project_hours_worked(project).round(2) %></td>
+        <td><%= calculate_project_hours_paid(project).round(2) %></td>
+        <td><%= (calculate_project_hours_worked(project)- calculate_project_hours_paid(project)).round(2) %></td>
         <td><%= project.company.nil? ? "-" : (link_to project.company.name, company_path(project.company)) %></td>
         <td><%= link_to 'Add Tasks', project_tasks_path(project) %></td>
         <td><%= link_to 'Edit', edit_project_path(project), remote: true %></td>

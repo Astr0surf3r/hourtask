@@ -1,3 +1,5 @@
+<div class="container">
+
 <p id="notice"><%= notice %></p>
 
 <p>
@@ -15,7 +17,34 @@
   <%= @payment.payment_method %>
 </p>
 
+<table class="table">
+  <thead>
+    <tr>
+      <th>Payment ID</th>
+      <th>Project</th>
+      <th>Hours</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @payment_items.each do |payment_item| %>
+      <tr>
+        <td><%= payment_item.payment_id %></td>
+        <td><%= Project.find(payment_item.project_id).name %></td>
+        <td><%= payment_item.hours_paid %></td>
+        <td><%= link_to 'Edit', edit_payment_item_path(payment_item) %></td>
+        <td><%= link_to 'Destroy', payment_item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
 <%= render 'form_payment_item' %>
 
 <%= link_to 'Edit', edit_payment_path(@payment) %> |
 <%= link_to 'Back', payments_path %>
+
+</div>
