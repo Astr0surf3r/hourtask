@@ -26,9 +26,12 @@ class TasksController < ApplicationController
   # POST /tasks or /tasks.json
   def create
     @task = Task.new(task_params)
+    @task.start_time = task_params["start_time(4i)"] + ":"  + task_params["start_time(5i)"]
+    @task.end_time = task_params["end_time(4i)"] + ":"  + task_params["end_time(5i)"]
     respond_to do |format|
       if @task.save
-        format.html { redirect_to project_tasks_path, notice: "Task was successfully created." }
+        @project = @task.project 
+        format.html { redirect_to project_tasks_path(@project), notice: "Task was successfully created." }
         format.json { render :show, status: :created, location: @task }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -40,12 +43,13 @@ class TasksController < ApplicationController
   # PATCH/PUT /tasks/1 or /tasks/1.json
   def update
     respond_to do |format|
+      @project = @task.project 
       if @task.update(task_params)
         if @task.closed?
           hours_worked = calculate_hours_worked(@task)
           @task.update(hours_worked: hours_worked)
         end
-        format.html { redirect_to project_tasks_path, notice: "Task was successfully updated." }
+        format.html { redirect_to project_tasks_path(@project), notice: "Task was successfully updated." }
         format.json { render :show, status: :ok, location: @task }
       else
         format.html { render :edit, status: :unprocessable_entity }

@@ -7,7 +7,7 @@
     <h1>All Tasks</h1> 
   </div>
   <div class="col text-right">
-    <%= link_to "<i class='fas fa-download'></i> .xls".html_safe, get_pdf_path, class: "btn btn-sm btn-success" %>
+    <%= link_to "<i class='fas fa-download'></i> .xls".html_safe, get_xls_path, class: "btn btn-sm btn-success" %>
     <%= link_to "<i class='fas fa-download'></i> .pdf".html_safe, get_pdf_path, class: "btn btn-sm btn-danger" %>
   </div>
 </div>
@@ -25,18 +25,15 @@
       <th colspan="3"></th>
     </tr>
   </thead>
-
-<!-- Date.parse(project.created_at.to_s).strftime('%d/%m/%Y') -->
-
   <tbody>
     <% @tasks.each do |task| %>
       <tr>
         <td><%= task.day.strftime('%d/%m/%Y') %></td>
         <td><%= link_to task.project.name, project_tasks_path(task.project) %></td>
         <td><%= task.description %></td>
-        <td><%= task.start_time.in_time_zone(Time.zone).strftime('%I:%M:%p') %></td>
-        <td><%= task.closed? ? task.end_time.strftime('%I:%M:%p') : "-" %></td>
-        <td> <%= task.hours_worked %> </td>
+        <td><%= task.start_time.in_time_zone(Time.zone).strftime('%T') %></td>
+        <td><%= task.closed? ? task.end_time.strftime('%T') : "-" %></td>
+        <td> <%= task.hours_worked.nil? ? "-" : task.hours_worked.round(2) %> </td>
         <td><%= task.closed? ? (link_to "Closed", "#", class: "btn btn-sm btn-success") : (link_to "Open", "#", class: "btn btn-sm btn-danger") %></td>
         <td><%#= link_to 'Show', task %></td>
         <td><%#= link_to 'Edit', edit_task_path(task) %></td>

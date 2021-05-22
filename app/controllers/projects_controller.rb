@@ -55,7 +55,11 @@ class ProjectsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  def welcome
 
+  end
+  
   def get_pdf
 
     #html = File.read(Rails.root.join('app/assets/files/receipt.html'))
@@ -78,6 +82,10 @@ class ProjectsController < ApplicationController
         send_data pdf.render, filename: "ciao.pdf", type: "application/pdf"
       end
     end
+
+  end
+  
+  def get_xls
 
   end
 
