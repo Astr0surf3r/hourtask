@@ -53,4 +53,9 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 # gem 'wicked_pdf'
 # gem 'wkhtmltopdf-binary'
 
-gem 'prawn-rails'
+# gem 'prawn-rails'
+
+#
+gem 'pdfkit'
+gem 'wicked_pdf'
+gem 'wkhtmltopdf-binary', '~> 0.12.3.1' # this version for Ubuntu 16.04

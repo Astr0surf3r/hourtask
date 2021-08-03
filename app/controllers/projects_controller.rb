@@ -59,29 +59,41 @@ class ProjectsController < ApplicationController
   def welcome
 
   end
-  
+
   def get_pdf
-
-    #html = File.read(Rails.root.join('app/assets/files/receipt.html'))
-
-    #@pdf = WickedPdf.new.pdf_from_string(html.clone,
-    #                                       margin: {
-    #                                           top: '0.25in',
-    #                                           bottom: '0.25in',
-    #                                           right: '0.25in',
-    #                                           left: '0.25in'
-    #                                       }
-    #                                    )
-
-    #send_data @pdf, type: 'application/pdf', disposition: 'inline' 
     
-    respond_to do |format|
-      format.html
-      format.pdf do
-        pdf = ProjectsPdf.new
-        send_data pdf.render, filename: "ciao.pdf", type: "application/pdf"
-      end
+    projects = Project.all
+    project_detail_html = ""
+    html = File.read(Rails.root.join('app/assets/files/receipt.html'))
+    
+    projects.order("name ASC").each do |project|
+    project_detail_html += "
+                            <tr>
+                              <td class='Fuente11'>#{project.name}</td>
+                              <td class='Fuente11'>#{helpers.number_to_currency(project.hourly_rate, unit: '$ ', separator: ',', delimiter: '')}</td>
+                              <td class='Fuente11'>#{project.currency}</td>
+                              <td class='Fuente11'>#{helpers.calculate_project_hours_worked(project).round(2)}</td>
+                              <td class='Fuente11'>#{helpers.calculate_project_hours_paid(project).round(2)}</td>
+                              <td class='Fuente11'>#{(helpers.calculate_project_hours_worked(project)- helpers.calculate_project_hours_paid(project)).round(2)}</td>
+                              <td class='Fuente11'>#{helpers.number_to_currency(helpers.calculate_project_amount_hours_paid(project), unit: '$ ', separator: ',', delimiter: '.')}</td>
+                              <td class='Fuente11'>#{helpers.number_to_currency(helpers.calculate_project_amount_hours_unpaid(project), unit: '$ ', separator: ',', delimiter: '.')}</td>                                                      
+                            </tr>"
     end
+    
+    html.gsub! "[[Website]]", "Italianolab.com"
+    html.gsub! "[[Date]]", Time.now.strftime('%d/%m/%Y')
+    html.gsub! "[[Item]]", project_detail_html
+    html.gsub! "[[AmountPaid]]", "#{helpers.number_to_currency(helpers.calculate_project_total_amount_hours_paid, unit: '$ ', separator: ',', delimiter: '.')}"
+    html.gsub! "[[AmountUnPaid]]", "#{helpers.number_to_currency(helpers.calculate_project_total_amount_hours_unpaid, unit: '$ ', separator: ',', delimiter: '.')}"
+    @pdf = WickedPdf.new.pdf_from_string(html.clone,
+                                         margin: {
+                                             top: '0.25in',
+                                             bottom: '0.25in',
+                                             right: '0.25in',
+                                             left: '0.25in'
+                                         })
+
+    send_data @pdf, type: 'application/pdf', disposition: 'inline'
 
   end
   
@@ -104,4 +116,74 @@ class ProjectsController < ApplicationController
                                       :previous_hours_worked,
                                       :previous_hours_paid)
     end
+
+    def calculate_project_total_amount_hours_paid
+      @projects = Project.all
+      total_amount_projects = Array.new
+      @projects.each do |project| 
+        amount = calculate_project_amount_hours_paid(project)
+        total_amount_projects << amount
+      end
+      
+      total_amount_hours_paid = total_amount_projects.inject(0){|sum,x| sum + x }
+    end
+
+    def calculate_project_total_amount_hours_unpaid
+      @projects = Project.all
+      total_amount_projects = Array.new
+      @projects.each do |project| 
+        amount = calculate_project_amount_hours_unpaid(project)
+        total_amount_projects << amount
+      end
+      
+      total_amount_hours_unpaid = total_amount_projects.inject(0){|sum,x| sum + x }
+    end
+    
+    def calculate_project_amount_hours_paid(project)
+      
+      @project = project
+      
+      unless @project.payment_items.blank?
+        amount_paid = (@project.previous_hours_paid + Project.last.payment_items.sum(:hours_paid)) * @project.hourly_rate 
+      else
+        amount_paid = @project.previous_hours_paid * @project.hourly_rate
+      end
+        
+    end
+
+    def calculate_project_amount_hours_unpaid(project)
+      
+      @project = project
+      
+      total_amount = calculate_project_hours_worked(@project) * @project.hourly_rate 
+      amount_paid = calculate_project_amount_hours_paid(@project)
+      
+      amount_unpaid = total_amount - amount_paid
+
+    end
+
+    def calculate_project_hours_worked(project)
+      
+      @project = project
+    
+      if @project.previous_hours_worked == 0.0
+        hours_worked = project.tasks.sum(:hours_worked)
+      else
+        hours_worked = @project.previous_hours_worked + @project.tasks.sum(:hours_worked)
+      end 
+    
+    end
+    
+    def calculate_project_hours_paid(project)
+    
+      @project = project
+      
+      if @project.previous_hours_paid == 0.0
+        hours_payed = @project.payment_items.sum(:hours_paid)
+      else
+        hours_payed = @project.previous_hours_paid + @project.payment_items.sum(:hours_paid)
+      end
+    
+    end
+
 end

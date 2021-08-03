@@ -4,7 +4,7 @@ class TasksController < ApplicationController
   # GET /tasks or /tasks.json
   def index
     @project = Project.find(params[:project_id])
-    @tasks = @project.tasks.order("day DESC")
+    @tasks = @project.tasks.order("id DESC")
   end
 
   # GET /tasks/1 or /tasks/1.json
@@ -69,7 +69,7 @@ class TasksController < ApplicationController
   end
 
   def all_tasks
-    @tasks = Task.all.order("day DESC")
+    @tasks = Task.all.order("id DESC")
   end
 
   private

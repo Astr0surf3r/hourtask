@@ -1,3 +1,11 @@
+<style>
+th{
+    font-size: 0.9em;
+}
+td{
+    font-size: 0.8em;
+}
+</style>
 <div class="container">
 
 <p id="notice"><%= notice %></p>
@@ -8,7 +16,7 @@
   </div>
   <div class="col text-right">
     <%= link_to "<i class='fas fa-download'></i> .xls".html_safe, get_pdf_path, class: "btn btn-sm btn-success" %>
-    <%= link_to "<i class='fas fa-download'></i> .pdf".html_safe, get_pdf_path, class: "btn btn-sm btn-danger" %>
+    <%= link_to "<i class='fas fa-download'></i> .pdf".html_safe, get_pdf_path(format: :pdf), class: "btn btn-sm btn-danger" %>
   </div>
 </div>
 
@@ -16,13 +24,24 @@
   <thead>
     <tr>
       <!-- <th>Begin</th> -->
+      <th></th>
+      <th></th>
+      <th></th>
+      <th colspan="3"><div align="center">HOURS</div> </th>
+      <th colspan="3"><div align="center">AMOUNT</div></th>
+      <th colspan="3"></th>
+    </tr>
+    <tr>
+      <!-- <th>Begin</th> -->
       <th>Name</th>
       <th>Hourly Rate</th>
       <th>Currency</th>
-      <th>Hours Worked</th>
-      <th>Hours Paid</th>
-      <th>Hours UnPaid</th>
-      <th>Company</th>
+      <th>Worked</th>
+      <th>Paid</th>
+      <th>UnPaid</th>
+      <th>Paid</th>
+      <th>UnPaid</th>
+      <th>Total</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -30,19 +49,33 @@
   <tbody>
     <% @projects.each do |project| %>
       <tr>
-        <!-- <td> <%#= Date.parse(project.created_at.to_s).strftime('%d/%m/%Y') %> </td> -->
         <td><%= link_to project.name, project_tasks_path(project) %></td>
         <td><%= number_to_currency(project.hourly_rate, unit: "$ ", separator: ",", delimiter: "")  %></td>
         <td><%= project.currency %></td>
         <td><%= calculate_project_hours_worked(project).round(2) %></td>
         <td><%= calculate_project_hours_paid(project).round(2) %></td>
         <td><%= (calculate_project_hours_worked(project)- calculate_project_hours_paid(project)).round(2) %></td>
+        <td><%= number_to_currency(calculate_project_amount_hours_paid(project), unit: "$ ", separator: ",", delimiter: "") %></td>
+        <td><%= number_to_currency(calculate_project_amount_hours_unpaid(project), unit: "$ ", separator: ",", delimiter: "")%></td>
+        <td><%= number_to_currency((project.hourly_rate * calculate_project_hours_worked(project)), unit: "$ ", separator: ",", delimiter: "") %></td>
         <td><%= project.company.nil? ? "-" : (link_to project.company.name, company_path(project.company)) %></td>
-        <td><%= link_to 'Add Tasks', project_tasks_path(project) %></td>
-        <td><%= link_to 'Edit', edit_project_path(project), remote: true %></td>
-        <td><%= link_to 'Destroy', project, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to "<i class='fas fa-pen-alt'></i>".html_safe, edit_project_path(project), class: "btn btn-sm btn-info", remote: true %></td>
+        <td><%= link_to "<i class='fas fa-times'></i>".html_safe, project, class: "btn btn-sm btn-danger", method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><%= number_to_currency(calculate_project_total_amount_hours_paid, unit: "$ ", separator: ",", delimiter: ".") %></td>
+        <td><%= number_to_currency(calculate_project_total_amount_hours_unpaid, unit: "$ ", separator: ",", delimiter: ".") %></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
   </tbody>
 </table>
 
