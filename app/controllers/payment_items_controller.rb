@@ -8,7 +8,8 @@ class PaymentItemsController < ApplicationController
   # POST /payments or /payments.json
   def create
     @payment_item = PaymentItem.new(payment_item_params)
-
+    @payment = @payment_item.payment
+    
     respond_to do |format|
       if @payment_item.save
         format.html { redirect_to @payment, notice: "PaymentItem was successfully created." }
