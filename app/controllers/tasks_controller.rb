@@ -72,6 +72,46 @@ class TasksController < ApplicationController
     @tasks = Task.all.order("id DESC")
   end
 
+  def get_tasks_pdf
+    
+    project = Project.find(params[:id])
+    project_detail_html = ""
+    html = File.read(Rails.root.join('app/assets/files/receipt.html'))
+    
+    projects.order("name ASC").each do |project|
+    project_detail_html += "
+                            <tr>
+                              <td class='Fuente11'>#{project.name}</td>
+                              <td class='Fuente11'>#{helpers.number_to_currency(project.hourly_rate, unit: '$ ', separator: ',', delimiter: '')}</td>
+                              <td class='Fuente11'>#{project.currency}</td>
+                              <td class='Fuente11'>#{helpers.calculate_project_hours_worked(project).round(2)}</td>
+                              <td class='Fuente11'>#{helpers.calculate_project_hours_paid(project).round(2)}</td>
+                              <td class='Fuente11'>#{(helpers.calculate_project_hours_worked(project)- helpers.calculate_project_hours_paid(project)).round(2)}</td>
+                              <td class='Fuente11'>#{helpers.number_to_currency(helpers.calculate_project_amount_hours_paid(project), unit: '$ ', separator: ',', delimiter: '.')}</td>
+                              <td class='Fuente11'>#{helpers.number_to_currency(helpers.calculate_project_amount_hours_unpaid(project), unit: '$ ', separator: ',', delimiter: '.')}</td>                                                      
+                            </tr>"
+    end
+    
+    html.gsub! "[[Website]]", "Italianolab.com"
+    html.gsub! "[[Date]]", Time.now.strftime('%d/%m/%Y')
+    html.gsub! "[[Item]]", project_detail_html
+    html.gsub! "[[AmountPaid]]", "#{helpers.number_to_currency(helpers.calculate_project_total_amount_hours_paid, unit: '$ ', separator: ',', delimiter: '.')}"
+    html.gsub! "[[AmountUnPaid]]", "#{helpers.number_to_currency(helpers.calculate_project_total_amount_hours_unpaid, unit: '$ ', separator: ',', delimiter: '.')}"
+    @pdf = WickedPdf.new.pdf_from_string(html.clone,
+                                         margin: {
+                                             top: '0.25in',
+                                             bottom: '0.25in',
+                                             right: '0.25in',
+                                             left: '0.25in'
+                                         })
+
+    send_data @pdf, type: 'application/pdf', disposition: 'inline'
+
+  end
+  
+  def get_tasks_xls
+  end
+
   private
     
     def calculate_hours_worked(task)
