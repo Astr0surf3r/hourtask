@@ -18,7 +18,7 @@
 
   <tbody>
     <% @payments.each do |payment| %>
-      <tr>
+      <tr >
         <td><%= number_to_currency(payment.amount, unit: "MXN ") %></td>
         <td><%= payment.currency %></td>
         <td><%= payment.payment_method %></td>

@@ -36,17 +36,18 @@ class PaymentItemsController < ApplicationController
 
   # DELETE /payments/1 or /payments/1.json
   def destroy
+    #byebug
     @payment_item.destroy
     respond_to do |format|
-      format.html { redirect_to payments_url, notice: "Payment was successfully destroyed." }
-      format.json { head :no_content }
+      format.html
+      format.js
     end
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_payment
-      @payment = Payment.find(params[:id])
+    def set_payment_item
+      @payment_item = PaymentItem.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.

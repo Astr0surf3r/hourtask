@@ -1,7 +1,7 @@
 class Project < ApplicationRecord
 
   has_many :tasks, dependent: :destroy
-  has_many :payment_items
+  has_many :payment_items, dependent: :destroy
   belongs_to :company
  
 end

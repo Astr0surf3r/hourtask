@@ -69,7 +69,7 @@ class TasksController < ApplicationController
   end
 
   def all_tasks
-    @tasks = Task.all.order("id DESC")
+    @tasks = Task.all.order("id DESC").page params[:page]
   end
 
   def get_tasks_pdf
