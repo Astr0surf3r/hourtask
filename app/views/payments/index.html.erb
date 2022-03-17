@@ -24,9 +24,9 @@
         <td><%= payment.payment_method %></td>
         <td><%= retrieve_projects(payment) %></td>
         <td><%= payment.created_at.strftime('%d/%m/%Y') %></td>
-        <td><%= link_to 'Show', payment %></td>
-        <td><%= link_to 'Edit', edit_payment_path(payment) %></td>
-        <td><%= link_to 'Destroy', payment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to "<i class='fas fa-credit-card'></i>".html_safe, payment, class: "btn btn-success" %></td>
+        <td><%= link_to "<i class='fas fa-pen'></i>".html_safe, edit_payment_path(payment), class: "btn btn-info" %></td>
+        <td><%= link_to "<i class='fas fa-times'></i>".html_safe, payment, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %></td>
       </tr>
     <% end %>
   </tbody>
@@ -34,6 +34,6 @@
 
 <br>
 
-<%= link_to 'New Payment', new_payment_path %>
+<h1><%= link_to 'New Payment', new_payment_path, class: "btn btn-info" %></h1>
 
 </div>
