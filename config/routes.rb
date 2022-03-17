@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
    
+  resources :discounts
   resources :payments
   resources :payment_items
 

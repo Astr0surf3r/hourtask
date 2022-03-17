@@ -58,10 +58,10 @@ td{
         <td><%= (calculate_project_hours_worked(project)- calculate_project_hours_paid(project)).round(2) %></td>
         <td><%= number_to_currency(calculate_project_amount_hours_paid(project), unit: "$ ", separator: ",", delimiter: "") %></td>
         <td><%= number_to_currency(calculate_project_amount_hours_unpaid(project), unit: "$ ", separator: ",", delimiter: "")%></td>
+        <td>-</td>
         <td><%= number_to_currency((project.hourly_rate * calculate_project_hours_worked(project)), unit: "$ ", separator: ",", delimiter: "") %></td>
-        <td><%= number_to_currency((project.hourly_rate * calculate_project_hours_worked(project)), unit: "$ ", separator: ",", delimiter: "") %></td>
-        <td> - </td>
-        <td><%= link_to "<i class='fas fa-pen-alt'></i>".html_safe, edit_project_path(project), class: "btn btn-sm btn-info", remote: true %></td>
+        <td><%= project.company.nil? ? "-" : (link_to project.company.name, company_path(project.company)) %></td>
+        <td><%= link_to "<i class='fas fa-pen'></i>".html_safe, edit_project_path(project), class: "btn btn-sm btn-info", remote: true %></td>
         <td><%= link_to "<i class='fas fa-times'></i>".html_safe, project, class: "btn btn-sm btn-danger", method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
