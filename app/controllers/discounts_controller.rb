@@ -64,6 +64,6 @@ class DiscountsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def discount_params
-      params.require(:discount).permit(:discounted_hours, :project_id)
+      params.require(:discount).permit(:discounted_hours, :project_id, :reason)
     end
 end

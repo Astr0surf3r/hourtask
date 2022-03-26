@@ -1,0 +1,63 @@
+<p id="notice"><%= notice %></p>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col">
+
+    <h1>Searched: <%= params[:term] %> </h1>
+  
+    <% if @tasks.present? %>
+    
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Project</th>
+            <th>Day</th>
+            <th>Start time</th>
+            <th>End time</th>
+            <th>Description</th>
+            <th>Hours Worked</th>
+            <th>Status</th>
+            <th colspan="3"></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @tasks.each do |task| %>
+            <tr>
+              <td><%= link_to task.project.name, project_tasks_path(task.project) %></td>
+              <td><%= task.day.nil? ? "-" : task.day.strftime('%d/%m/%Y') %></td>
+              <td><%= task.start_time.strftime('%T') %></td>
+              <td><%= task.closed? ? task.end_time.strftime('%T') : "-" %></td>
+              <td><%= task.description %></td>
+              <td><%= task.closed? ? task.hours_worked : "-" %></td>
+              <td><%= 
+                      if task.closed? 
+                        link_to 'Closed', '#', class: 'btn btn-sm btn-success'
+                      else
+                        link_to 'Open', '#', class: 'btn btn-sm btn-danger', remote: true
+                      end
+                   %>
+              </td>
+              <td><%#= link_to 'Show', task %></td>
+              <td><%= link_to "<i class='fas fa-pen-alt'></i>".html_safe, edit_project_task_path(task.project, task), class: "btn btn-sm btn-info", remote: true %></td>
+              <td><%= link_to "<i class='fas fa-times'></i>".html_safe, project_task_path(task.project, task), class: "btn btn-sm btn-danger", method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+    <% else %>
+      
+      <p>
+        No tass found search another term
+      </p>
+
+    <% end %>
+    <br>
+    
+    <%= link_to 'Back', root_path, class: "btn btn-info" %>
+
+    </div>
+  </div>
+</div>
