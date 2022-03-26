@@ -9,9 +9,12 @@
     <table class="table">
       <thead>
         <tr>
+          <th>Company</th>
+          <th>Project</th>
+          <th>Unpaied Hours</th>
           <th>Discounted hours</th>
           <th> Value </th>
-          <th>Project</th>
+          <th> Currency </th>
           <th>Reason</th>
           <th colspan="2"></th>
         </tr>
@@ -20,9 +23,12 @@
       <tbody>
         <% @discounts.each do |discount| %>
           <tr>
-            <td><%= discount.discounted_hours %></td>
-            <td><%= calculus_value (discount) %></td>
+            <th><%= discount.project.company.name %></th>
             <td><%= link_to discount.project.name, project_tasks_path(discount.project) %></td>
+            <td><%= number_to_currency(calculate_project_amount_hours_unpaid(discount.project), unit: "$ ", separator: ",", delimiter: "")%></td>
+            <td><%= discount.discounted_hours %></td>
+            <td><%= number_to_currency(calculus_discounted_value(discount), unit: "#{retrieve_currency_symbol(discount.project)} " ) %></td>
+            <td><%= discount.project.currency %></td>
             <td><%= discount.reason %></td>
             <td><%= link_to "<i class='fas fa-pen'></i>".html_safe, edit_discount_path(discount), class: "btn btn-info" %></td>
             <td><%= link_to "<i class='fas fa-times'></i>".html_safe, discount, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %></td>

@@ -111,6 +111,13 @@ class TasksController < ApplicationController
   
   def get_tasks_xls
   end
+  
+  def search
+    
+    term = params[:term]
+    @tasks = Task.where("description LIKE ?", "%" + term + "%")
+
+  end
 
   private
     

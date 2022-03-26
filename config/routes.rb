@@ -16,7 +16,9 @@ Rails.application.routes.draw do
   
   get 'get/tasks_pdf', to: "tasks#get_pdf", as: :get_tasks_pdf
   get 'get/tasks_xls', to: "tasks#get_xls", as: :get_tasks_xls
-
+  
+  get 'search', to: "tasks#search"
+   
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   root "projects#welcome"
 
