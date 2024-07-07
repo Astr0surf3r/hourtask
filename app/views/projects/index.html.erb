@@ -61,8 +61,21 @@ td{
         <td>-</td>
         <td><%= number_to_currency((project.hourly_rate * calculate_project_hours_worked(project)), unit: "$ ", separator: ",", delimiter: "") %></td>
         <td><%= project.company.nil? ? "-" : (link_to project.company.name, company_path(project.company)) %></td>
-        <td><%= link_to "<i class='fas fa-pen'></i>".html_safe, edit_project_path(project), class: "btn btn-sm btn-info", remote: true %></td>
-        <td><%= link_to "<i class='fas fa-times'></i>".html_safe, project, class: "btn btn-sm btn-danger", method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% if user_signed_in? %>
+          <td><%= link_to "<i class='fas fa-pen'></i>".html_safe, edit_project_path(project), class: "btn btn-sm btn-info", remote: true %></td>
+          <td><%= link_to "<i class='fas fa-times'></i>".html_safe, project, class: "btn btn-sm btn-danger", method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% else %>
+          <td>
+            <%= button_tag type: 'button', class: 'btn btn-sm btn-info', data: { toggle: 'modal', target: '#exampleModal' } do %>
+              <i class='fas fa-pen'></i>
+            <% end %> 
+          </td>
+          <td>
+            <%= button_tag type: 'button', class: 'btn btn-sm btn-danger', data: { toggle: 'modal', target: '#exampleModal' } do %>
+              <i class='fas fa-times'></i>
+            <% end %>
+          </td>
+        <% end %>
       </tr>
     <% end %>
       <tr>
@@ -83,10 +96,18 @@ td{
 
 <br>
 
-<h1><%= link_to 'New Project', new_project_path, class: "btn btn-sm btn-success", remote: true %> | 
+<% unless user_signed_in? %>
+    <h1>
+      <%= button_tag type: 'button', class: 'btn btn-sm btn-success', data: { toggle: 'modal', target: '#exampleModal' } do %>
+        New Project
+      <% end %> |
+      <%= link_to 'All Tasks', all_tasks_path, class: "btn btn-sm btn-warning" %> </h1>
+      <%= render 'shared/dialog_unsigned' %>
+  <% else %>
+    <h1><%= link_to 'New Project', new_project_path, class: "btn btn-sm btn-success", remote: true %> | 
 
-<%= link_to 'All Tasks', all_tasks_path, class: "btn btn-sm btn-warning" %> </h1>
-
+    <%= link_to 'All Tasks', all_tasks_path, class: "btn btn-sm btn-warning" %> </h1>
+  <% end %>
 </div>
 
 <%= render "dialog" %>

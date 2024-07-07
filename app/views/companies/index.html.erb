@@ -30,9 +30,14 @@
     <% end %>
   </tbody>
 </table>
-
-<%= link_to 'New Company', new_company_path, remote: true %>
-
+<% unless user_signed_in? %>
+  <%= button_tag type: 'button', class: 'btn btn-primary', data: { toggle: 'modal', target: '#exampleModal' } do %>
+    New Company
+  <% end %>
+  <%= render 'shared/dialog_unsigned' %>
+<% else %>
+  <%= link_to 'New Company', new_company_path, remote: true %>
+<% end %>
 </div>
 
 <%= render 'dialog' %>

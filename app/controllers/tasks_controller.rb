@@ -69,7 +69,11 @@ class TasksController < ApplicationController
   end
 
   def all_tasks
-    @tasks = Task.all.order("id DESC").page params[:page]
+    if user_signed_in?
+      @tasks = current_user.tasks.order("id DESC").page params[:page]
+    else   
+      @tasks = Task.all.order("id DESC").page params[:page]
+    end
   end
 
   def get_tasks_pdf

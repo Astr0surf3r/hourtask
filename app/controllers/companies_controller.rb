@@ -3,7 +3,11 @@ class CompaniesController < ApplicationController
 
   # GET /companies or /companies.json
   def index
-    @companies = Company.all
+    if user_signed_in?
+      @companies = current_user.companies
+    else
+      @companies = User.find(1).companies
+    end
   end
 
   # GET /companies/1 or /companies/1.json

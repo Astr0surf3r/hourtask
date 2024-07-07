@@ -38,9 +38,14 @@
     </table>
     
     <br>
-    
-    <%= link_to 'New Discount', new_discount_path, class: "btn btn-info" %>
-
+    <% unless user_signed_in? %>
+    <%= button_tag type: 'button', class: 'btn btn-info', data: { toggle: 'modal', target: '#exampleModal' } do %>
+      New Discount
+    <% end %>
+      <%= render 'shared/dialog_unsigned' %>
+    <% else %>
+      <%= link_to 'New Discount', new_discount_path, class: "btn btn-info" %>
+    <% end %>
     </div>
   </div>
 </div>

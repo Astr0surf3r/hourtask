@@ -34,6 +34,12 @@
 
 <br>
 
-<h1><%= link_to 'New Payment', new_payment_path, class: "btn btn-info" %></h1>
-
+<% unless user_signed_in? %>
+  <%= button_tag type: 'button', class: 'btn btn-primary', data: { toggle: 'modal', target: '#exampleModal' } do %>
+    New Payment
+  <% end %>
+  <%= render 'shared/dialog_unsigned' %>
+<% else %>
+  <h1><%= link_to 'New Payment', new_payment_path, class: "btn btn-info" %></h1>
+<% end %>
 </div>

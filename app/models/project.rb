@@ -5,5 +5,6 @@ class Project < ApplicationRecord
   has_many :discounts, dependent: :destroy
 
   belongs_to :company
+  belongs_to :user
 
 end

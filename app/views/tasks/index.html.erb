@@ -8,8 +8,14 @@ td{
 </style>
 <div class="row">
   <div class="col">
-    <font size="5px"><%= @project.name %></font> <%= link_to "<i class='fas fa-pen-alt'></i>".html_safe, edit_project_path(@project), remote: true %>
-    <%= link_to "<i class='fas fa-times'></i>".html_safe, @project, method: :delete, data: { confirm: "Are you sure you want delete the project #{@project.name} and its tasks?" } %>
+    <% if user_signed_in? %>
+      <font size="5px"><%= @project.name %></font> <%= link_to "<i class='fas fa-pen-alt'></i>".html_safe, edit_project_path(@project), remote: true %>
+      <%= link_to "<i class='fas fa-times'></i>".html_safe, @project, method: :delete, data: { confirm: "Are you sure you want delete the project #{@project.name} and its tasks?" } %>
+    <% else %>
+      <font size="5px"><%= @project.name %></font> 
+      <%= link_to "<i class='fas fa-pen-alt'></i>".html_safe, "#", data: { toggle: "modal", target: "#exampleModal" } %>
+      <%= link_to "<i class='fas fa-times'></i>".html_safe, "#", data: { toggle: "modal", target: "#exampleModal" } %>
+    <% end %>
   </div>
   <div class="col text-left">
     
@@ -23,7 +29,13 @@ td{
 
 <div class="row">
   <div class="col">
-   <%= link_to 'New Task', new_project_task_path(project_id: @project.id), class: "btn btn-sm btn-success", remote: true %>
+    <% if user_signed_in? %>
+      <%= link_to 'New Task', new_project_task_path(project_id: @project.id), class: 'btn btn-sm btn-success', remote: true %>
+    <% else %>
+      <%= button_tag type: 'button', class: 'btn btn-sm btn-success', data: { toggle: 'modal', target: '#exampleModal' } do %>
+        New Task
+      <% end %>
+    <% end %>
   </div>
   <div class="col text-right">
     <%= link_to "<i class='fas fa-download'></i> .xls".html_safe, get_tasks_pdf_path, class: "btn btn-sm btn-success" %>
@@ -62,9 +74,22 @@ td{
                 end
              %>
         </td>
-        <td><%#= link_to 'Show', task %></td>
-        <td><%= link_to "<i class='fas fa-pen-alt'></i>".html_safe, edit_project_task_path(@project, task), class: "btn btn-sm btn-info", remote: true %></td>
-        <td><%= link_to "<i class='fas fa-times'></i>".html_safe, project_task_path(@project, task), class: "btn btn-sm btn-danger", method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td></td>
+        <% if user_signed_in? %>
+          <td><%= link_to "<i class='fas fa-pen-alt'></i>".html_safe, edit_project_task_path(@project, task), class: "btn btn-sm btn-info", remote: true %></td>
+          <td><%= link_to "<i class='fas fa-times'></i>".html_safe, project_task_path(@project, task), class: "btn btn-sm btn-danger", method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% else %>
+          <td>
+            <%= button_tag type: 'button', class: 'btn btn-info', data: { toggle: 'modal', target: '#exampleModal' } do %>
+              <i class='fas fa-pen-alt'></i>
+            <% end %> 
+          </td>
+          <td>
+            <%= button_tag type: 'button', class: 'btn btn-danger', data: { toggle: 'modal', target: '#exampleModal' } do %>
+              <i class='fas fa-times'></i>
+            <% end %>
+          </td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>
@@ -74,4 +99,8 @@ td{
 
 </div>
 
-<%= render "dialog" %>
+<% if user_signed_in? %>
+  <%= render "dialog" %>
+<% else %>
+  <%= render "shared/dialog_unsigned" %>
+<% end %>

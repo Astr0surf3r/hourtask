@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">HourTasks!</a>
+  <a class="navbar-brand" href="#">HourTask!</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -25,15 +25,18 @@
         <%= link_to "Discounts".html_safe, discounts_path, class: "nav-link" %>
       </li>
     </ul>
+    <% if user_signed_in? %>
+      <span class="navbar-text" style="padding-right:10px;">
+        <%= link_to "Logout".html_safe, destroy_user_session_path, method: :delete, class: "btn btn-outline-danger my-2 my-sm-0" %>
+      </span>
     <%= form_tag("/search", :method => "get", class: "form-inline my-2 my-lg-0") do %>
       <%= search_field_tag "term", nil, placeholder: "Some Task", class: "form-control mr-sm-2" %>
       <%= submit_tag "Search Task", {name: nil, class: "btn btn-outline-success my-2 my-sm-0"} %>
     <% end %>
-    <!-- 
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search Task</button>
-    </form>
-    -->
+    <% else %>
+      <span class="navbar-text">
+        <%= link_to "Login".html_safe, new_user_session_path, class: "btn btn-outline-success my-2 my-sm-0" %>
+      </span>
+    <% end %>
   </div>
 </nav>

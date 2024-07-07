@@ -55,3 +55,5 @@ gem 'wkhtmltopdf-binary', '~> 0.12.3.1' # this version for Ubuntu 16.04
 
 # Pagination
 gem 'kaminari'
+
+gem "devise", "~> 4.9"
