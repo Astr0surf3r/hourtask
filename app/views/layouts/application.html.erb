@@ -13,7 +13,7 @@
   <body>
     
     <%= render 'layouts/navbar' %>
-
+    <div class="d-flex flex-column min-vh-100">
     <div class="container">
       
       <div class="row">
@@ -23,7 +23,10 @@
       </div>
 
       <%= yield %>
-    
+    </div>
+      <footer class="footer mt-auto py-3 bg-light">
+      Hourtask &copy; <%= Time.new.year %> an <%= link_to 'Astr0surf3r Open Source project', 'https://github.com/Astr0surf3r/hourtask' %>
+      </footer>
     </div>
 
   </body>
