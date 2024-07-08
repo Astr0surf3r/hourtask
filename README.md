@@ -1,4 +1,4 @@
-## Hourtask a Basic Time Tracker
+## Hourtask an Open Source Basic Time Tracker
 
 This is a time tracking web application built with Ruby on Rails to help you manage your projects and tasks efficiently.
 
